@@ -1,0 +1,124 @@
+-__ /\                     ,,               ,- _~,                                                          
+  || \,          _         ||   _          (' /| / ,                                    '                   
+ /|| /    _-_   / \\ \\ \\ ||  < \, ,._-_ ((  ||/= \\ /` -_-_  ,._-_  _-_   _-_,  _-_, \\  /'\\ \\/\\  _-_, 
+ \||/-   || \\ || || || || ||  /-||  ||   ((  ||    \\   || \\  ||   || \\ ||_.  ||_.  || || || || || ||_.  
+  ||  \  ||/   || || || || || (( ||  ||    ( / |    /\\  || ||  ||   ||/    ~ ||  ~ || || || || || ||  ~ || 
+_---_-|, \\,/  \\_-| \\/\\ \\  \/\\  \\,    -____- /  \; ||-'   \\,  \\,/  ,-_-  ,-_-  \\ \\,/  \\ \\ ,-_-  
+                /  \                                     |/                                                 
+               '----`                                    '                                                  
+
+#Basic Regex Syntax---------------------------------
+Literal Characters: Match themselves.
+Example: cat matches "cat" in text.
+
+Dot (.): Matches any single character except newline.
+Example: c.t matches "cat", "cut", "c9t".
+
+Escape (\): Escapes special characters.
+Example: \. matches a literal dot.
+
+#Regex in Linux Tools---------------------------------
+grep: Search for patterns in files.
+
+Basic: grep 'pattern' file.txt
+
+Extended: grep -E 'pattern' file.txt or egrep 'pattern' file.txt
+
+sed: Stream editor for filtering and transforming text.
+
+Example: sed -n '/pattern/p' file.txt
+
+awk: Pattern scanning and processing language.
+
+Example: awk '/pattern/ {print}' file.txt
+
+#Character Classes and Ranges---------------------------------
+Square brackets [ ]: Match any one character inside.
+
+[abc] matches "a", "b", or "c".
+
+[0-9] matches any digit.
+
+Negation [^ ]: Match any character except those inside.
+
+[^0-9] matches any non-digit.
+
+Predefined Classes (in grep -P or Perl):
+
+\d: digit
+
+\w: word character (alphanumeric + _)
+
+\s: whitespace
+
+#Anchors and Boundaries---------------------------------
+Caret ^: Start of line.
+
+^cat matches "cat" at the beginning of a line.
+
+Dollar $: End of line.
+
+cat$ matches "cat" at the end of a line.
+
+Word boundary \b (in grep -P or Perl):
+
+\bcat\b matches "cat" as a whole word.
+
+#Quantifiers---------------------------------
+Asterisk *: 0 or more of the preceding element.
+
+a* matches "", "a", "aa", "aaa", etc.
+
+Plus +: 1 or more (in ERE/Perl).
+
+a+ matches "a", "aa", etc.
+
+Question mark ?: 0 or 1 (in ERE/Perl).
+
+a? matches "" or "a".
+
+Curly braces {n,m}: Between n and m times (in ERE/Perl).
+
+a{2,4} matches "aa", "aaa", or "aaaa".
+
+#Grouping and Backreferences---------------------------------
+Parentheses (): Group expressions (in ERE/Perl).
+
+(ab)+ matches "ab", "abab", "ababab", etc.
+
+Backreference \1, \2, ...: Refer to captured groups (in sed, grep -P, etc.).
+
+(\w+)\s+\1 matches repeated words (e.g., "hello hello").
+
+
+
+Character-Meaning-Example---------------------------------
+.	Any character	a.b matches "acb"
+*	0 or more	ab*c matches "ac", "abc"
++	1 or more (ERE/Perl)	ab+c matches "abc", "abbc"
+?	0 or 1 (ERE/Perl)	ab?c matches "ac", "abc"
+[]	Character class	[aeiou]
+()	Grouping	(ab)+
+{}	Repetition (ERE/Perl)	a{2,3}
+\	Escape	. matches "."
+^	Start of line	^abc
+$	End of line	abc$
+
+#Some Fun Techniques---------------------------------
+
+Find lines ending with a digit: grep '[0-9]$' file.txt
+Replace all digits with "#" using sed: sed 's/[0-9]/#/g' file.txt
+Match email addresses (simple version): grep -E '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' file.txt
+Find duplicate words: grep -P '\b(\w+)\s+\1\b' file.txt
+
+#Advanced Techniques---------------------------------
+Negative Lookahead/Lookbehind (Perl/grep -P)
+Negative lookahead: foo(?!bar) matches "foo" not followed by "bar".
+Negative lookbehind: (?<!foo)bar matches "bar" not preceded by "foo".
+grep -P 'foo(?!bar)' file.txt
+
+Using awk for field-based regex
+awk '$2 ~ /^[A-Z]/' file.txt
+
+Multi-line Matching (Perl)
+perl -00 -ne 'print if /pattern/' file.txt
